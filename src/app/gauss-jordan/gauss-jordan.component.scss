@@ -1,0 +1,384 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.calculator-container, .answer-container {
+  width: calc(100% - 40px); /* Вычитаем отступы слева и справа */
+  max-width: 1000px; /* Ограничиваем максимальную ширину контейнера */
+  overflow-x: auto;
+  max-height: calc(100vh - 160px); /* Вычитаем высоту заголовка и отступы */
+  padding: 25px;
+  padding-right: 20px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  text-align: center;
+  box-sizing: border-box;
+
+}
+
+.title {
+  font-size: 2.2em;
+  margin-bottom: 20px;
+}
+
+.matrix-size-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  align-items: center;
+
+  label {
+    margin: 0 5px;
+    font-size: 1.2em;
+    transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+
+  input[type="range"] {
+    width: 150px;
+    margin: 0 10px;
+    background-color: #70ffd9;
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #0019bb;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    &::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #0019bb;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    &:hover::-webkit-slider-thumb,
+    &:hover::-moz-range-thumb {
+      background-color: #0056b3;
+    }
+
+    &:active::-webkit-slider-thumb,
+    &:active::-moz-range-thumb {
+      background-color: #0056b3;
+    }
+  }
+}
+
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+
+  .matrix-row {
+    &:nth-child(odd) {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+    }
+  }
+
+  .matrix-cell {
+    padding: 3px;
+    border: 1px solid transparent;
+  }
+  .matrix-cell:focus {
+    outline: none;
+    border-color: #4a90e2;
+    animation: changeBackground 3s linear infinite alternate;
+  }
+
+  @keyframes changeBackground {
+    0% {
+      background: linear-gradient(45deg, #330663, #2575fc);
+    }
+    100% {
+      background: linear-gradient(45deg, #2575fc, #6a11cb);
+    }
+  }
+
+  .matrix-input {
+    width: 40px;
+    height: 35px;
+    padding: 8px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1em;
+    transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+
+  .matrix-input:focus {
+    transform: scale(1.1);
+  }
+}
+
+.solve-button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 20px;
+  transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.answer-container {
+  max-width: 500px;
+  max-height: 70vh; /* Добавляем ограничение на максимальную высоту */
+  overflow-y: auto; /* Добавляем вертикальную прокрутку */
+  animation: slideInUp 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.solution-container {
+  text-align: center;
+  padding: 20px;
+  background-color: transparent;
+}
+
+.solution-container, .reduced-matrix-container {
+  text-align: center;
+  margin: 0 20px;
+}
+
+.solution-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.reduced-matrix-container {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.reduced-matrix-title {
+  color: white;
+}
+
+.solution-title, .reduced-matrix-title {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.reduced-matrix-table, .reduced-matrix-table td {
+  color: white;
+  border-collapse: collapse;
+  border: none;
+  align-items: center;
+  justify-content: center;
+}
+.reduced-matrix-table td {
+  padding: 5px;
+}
+.solution-text {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.stepped-matrix {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.stepped-row {
+  display: flex;
+  justify-content: center;
+}
+
+.stepped-cell {
+  padding: 5px;
+  border: none;
+}
+
+.solution-title, .solution-text {
+  color: white;
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  .calculator-container, .answer-container {
+    padding: 20px;
+  }
+
+  .matrix-input {
+    width: 60px;
+    height: 30px;
+    padding: 6px;
+  }
+
+  .solve-button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .solution-title {
+    font-size: 1.2em;
+  }
+
+  .solution-text {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    padding: 5px;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Убираем горизонтальную прокрутку */
+  }
+
+  .calculator-container, .answer-container {
+    padding: 5px;
+  }
+
+  .title {
+    font-size: 1.2em;
+  }
+
+  .matrix-input {
+    width: 15px; /* Уменьшаем ширину вводных полей */
+    height: 15px; /* Уменьшаем высоту вводных полей */
+    padding: 1px; /* Уменьшаем отступы внутри вводных полей */
+    font-size: 0.6em; /* Уменьшаем размер шрифта */
+  }
+
+  .solve-button {
+    display: block;
+    width: 80%;
+    margin: 0 auto 20px;
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .matrix-size-selector {
+    flex-direction: column;
+    align-items: center; /* Центрируем ползунки по горизонтали */
+    label, input[type="range"] {
+      margin: 5px 0;
+      font-size: 0.8em;
+      width: 100%; /* Делаем ползунки шириной 100% */
+      text-align: center; /* Центрируем текст меток */
+    }
+  }
+
+  .solution-title {
+    font-size: 1em; /* Увеличиваем размер заголовка результата */
+  }
+
+  .solution-text {
+    font-size: 1em; /* Увеличиваем размер текста результата */
+  }
+
+  .solution-container, .reduced-matrix-container {
+    margin: 5px 0;
+    padding: 5px; /* Добавляем внутренние отступы */
+    width: 100%; /* Устанавливаем ширину контейнеров на 100% */
+    box-sizing: border-box; /* Включаем отступы и границы в ширину контейнера */
+  }
+
+  .matrix-table {
+    margin-bottom: 5px; /* Уменьшаем нижний отступ таблицы */
+    width: 100%; /* Устанавливаем ширину таблицы на 100% */
+    overflow-x: auto; /* Добавляем горизонтальную прокрутку для таблицы */
+  }
+
+  .matrix-cell {
+    padding: 0px; /* Уменьшаем отступы внутри ячеек */
+  }
+
+  .matrix-table, .reduced-matrix-table {
+    border-collapse: collapse; /* Убираем отступы между ячейками таблицы */
+    width: 100%; /* Устанавливаем ширину таблиц на 100% */
+  }
+
+  .matrix-cell, .reduced-matrix-table td {
+    border: 1px solid #ddd; /* Добавляем границы ячеек для улучшения внешнего вида */
+  }
+  .stepped-matrix table.stepped-matrix-table {
+    border: none; /* Убираем границы у таблицы */
+  }
+
+  .stepped-matrix table.stepped-matrix-table td {
+    border: none; /* Убираем границы у ячеек */
+  }
+
+  .solution-title, .solution-text {
+    color: white;
+  }
+}
+
+
+

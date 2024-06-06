@@ -1,0 +1,45 @@
+<div class="app-container">
+  <div class="calculator-container">
+    <h2 class="title">Метод Гаусса — Жордана</h2>
+    <div class="matrix-size-selector">
+      <label for="rows">Строки {{ rows }}</label>
+      <input type="range" id="rows" [(ngModel)]="rows" (input)="updateMatrixSize()"
+      min="3" [max]="isMobile ? 5 : 7">
+
+      <label for="columns">Колонки {{ columns }}</label>
+      <input type="range" id="columns" [(ngModel)]="columns" (input)="updateMatrixSize()"
+      min="3" [max]="isMobile ? 4 : 7">
+    </div>
+    <table class="matrix-table">
+      <ng-container *ngIf="matrix">
+        <tr class="matrix-row" *ngFor="let row of matrix; let rowIndex = index">
+          <ng-container *ngIf="row">
+            <td class="matrix-cell" *ngFor="let cell of row; let colIndex = index">
+              <input #inputRef class="matrix-input" type="text" [value]="tempInput[rowIndex][colIndex].value"
+                (input)="onCellInput($event, rowIndex, colIndex)"
+                (focus)="onCellFocus($event, rowIndex, colIndex)"
+                (blur)="onCellBlur($event, rowIndex, colIndex)">
+            </td>
+          </ng-container>
+        </tr>
+      </ng-container>
+    </table>
+    <button (click)="solve()"  class="solve-button">Вычислить</button>
+  </div>
+  <div class="answer-container">
+    <div *ngIf="solution" class="solution-container">
+      <div class="solution-content">
+        <h3 class="solution-title">Результат</h3>
+        <p class="solution-text">{{ solution }}</p>
+      </div>
+    </div>
+    <div *ngIf="reducedMatrix" class="reduced-matrix-container">
+      <h3 class="reduced-matrix-title">Ступеньчатая матрица</h3>
+      <table class="reduced-matrix-table">
+          <tr *ngFor="let row of reducedMatrix">
+              <td *ngFor="let cell of row">{{ cell.toFixed(2) }}</td>
+          </tr>
+      </table>
+    </div>
+  </div>
+</div>
